@@ -5,7 +5,8 @@
   "main": "lib/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "mocha"
+    "test": "mocha",
+    "release": "npm run build && webpack --mode=production"
   },
   "repository": {
     "type": "git",
@@ -18,14 +19,19 @@
   },
   "homepage": "https://github.com/andrewleader/adaptivecards-virtual#readme",
   "dependencies": {
+    "@types/deep-equal": "^1.0.1",
     "@types/lodash": "^4.14.134",
+    "@types/lodash.isequal": "^4.5.5",
     "@types/uuid": "^3.4.4",
     "adaptivecards-templating": "0.1.0-alpha.0",
-    "lodash": "^4.17.11",
+    "deep-equal": "^1.0.1",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
     "mocha": "^6.1.4",
-    "typescript": "^3.5.2"
+    "ts-loader": "^5.3.1",
+    "typescript": "^3.5.2",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2"
   }
 }

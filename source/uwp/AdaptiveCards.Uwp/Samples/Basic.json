@@ -1,0 +1,17 @@
+﻿{
+  "type": "AdaptiveCard",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Enter your name"
+    },
+    {
+      "type": "Input.Text",
+      "id": "name"
+    },
+    {
+      "type": "TextBlock",
+      "text": "You entered: {inputs.name}"
+    }
+  ]
+}

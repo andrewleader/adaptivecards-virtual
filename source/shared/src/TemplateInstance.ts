@@ -1,6 +1,6 @@
 import * as ACTemplating from "adaptivecards-templating";
 import * as helpers from "./helpers";
-import _ from "lodash";
+import isEqual from "deep-equal";
 
 export class TemplateInstance {
     private _template: ACTemplating.Template;
@@ -20,7 +20,7 @@ export class TemplateInstance {
         // Expand the template
         var expanded = this._template.expand(this._context);
 
-        if (!_.isEqual(expanded, this._currExpanded)) {
+        if (!isEqual(expanded, this._currExpanded)) {
             this._currExpanded = expanded;
             return true;
         } else {
