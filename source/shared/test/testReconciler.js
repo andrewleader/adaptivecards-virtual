@@ -34,7 +34,7 @@ describe("Test reconciler", function () {
     });
 
     
-    it("Test type changed", function () {
+    it("Test type changed inside array", function () {
         assertReconciliations({
             original: {
                 "type": "AdaptiveCard",
@@ -74,6 +74,52 @@ describe("Test reconciler", function () {
                             }
                         }
                     ]
+                }
+            ]
+        })
+    });
+
+    
+    it("Test type changed inside property", function () {
+        assertReconciliations({
+            original: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "TextBlock",
+                        "text": "Hello world",
+                        "selectAction": {
+                            "type": "Action.Submit",
+                            "title": "Click me"
+                        }
+                    }
+                ]
+            },
+            updated: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "TextBlock",
+                        "text": "Hello world",
+                        "selectAction": {
+                            "type": "Action.OpenUrl",
+                            "title": "No, click me!"
+                        }
+                    }
+                ]
+            },
+            expected: [
+                {
+                    "type": "ObjectChanges",
+                    "changes": {
+                        "selectAction": {
+                            "type": "Object",
+                            "props": {
+                                "type": "Action.OpenUrl",
+                                "title": "No, click me!"
+                            }
+                        }
+                    }
                 }
             ]
         })
