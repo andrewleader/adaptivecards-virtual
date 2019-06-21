@@ -1,4 +1,6 @@
-﻿using Jurassic;
+﻿using AdaptiveCards.Rendering.Uwp.Elements;
+using Jurassic;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,8 +18,13 @@ namespace AdaptiveCards.Rendering.Uwp
     {
         private ScriptEngine _scriptEngine;
         private Task _initialRenderTask;
-        private Border _container = new Border();
+        private AdaptiveCard _card = new AdaptiveCard();
         private CoreDispatcher _dispatcher;
+
+        public AdaptiveCardRenderer()
+        {
+            _card.Renderer = this;
+        }
 
         public FrameworkElement Render(string cardJson, string dataJson)
         {
@@ -27,7 +34,7 @@ namespace AdaptiveCards.Rendering.Uwp
                 RenderHelper(cardJson, dataJson);
             });
 
-            return _container;
+            return _card;
         }
 
         private void RenderHelper(string cardJson, string dataJson)
@@ -60,26 +67,72 @@ namespace AdaptiveCards.Rendering.Uwp
                 {
                     try
                     {
-                        _container.Child = new TextBlock()
-                        {
-                            Text = ex.ToString(),
-                            TextWrapping = TextWrapping.Wrap
-                        };
+                        System.Diagnostics.Debug.WriteLine(ex.ToString());
                     }
                     catch { }
                 });
             }
         }
 
+        internal async void UpdateInputValue(string inputId, string value)
+        {
+            await Task.Run(delegate
+            {
+                try
+                {
+                    _scriptEngine.SetGlobalValue("inputId", inputId);
+                    _scriptEngine.SetGlobalValue("inputValue", value);
+                    _scriptEngine.Execute("renderer.updateInputValue(inputId, inputValue);");
+                }
+                catch { }
+            });
+        }
+
         private void OnChanges(string changesAsJson)
         {
             try
             {
-                
+                JArray changes = JArray.Parse(changesAsJson);
+                OnChanges(changes);
             }
             catch
             {
 
+            }
+        }
+
+        private void OnChanges(JArray changes)
+        {
+            foreach (var change in changes.OfType<JObject>())
+            {
+                switch (change.Value<string>("type"))
+                {
+                    case "ObjectChanges":
+                        OnObjectChanges(change);
+                        break;
+
+                    case "ArrayChanges":
+
+                        break;
+                }
+            }
+        }
+
+        private void OnObjectChanges(JObject objectChanges)
+        {
+            string id = objectChanges.Value<string>("id");
+            var renderedItem = _card.GetById(id);
+            if (renderedItem == null)
+            {
+                renderedItem = _card;
+            }
+            if (renderedItem != null)
+            {
+                JObject changedProperties = objectChanges.Value<JObject>("changes");
+                foreach (var prop in changedProperties)
+                {
+                    renderedItem.ApplyPropertyChange(prop.Key, prop.Value);
+                }
             }
         }
 

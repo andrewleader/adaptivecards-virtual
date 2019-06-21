@@ -122,6 +122,19 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AdaptiveCardRenderer.cs" />
+    <Compile Include="Elements\AdaptiveCard.xaml.cs">
+      <DependentUpon>AdaptiveCard.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AdaptiveContainer.xaml.cs">
+      <DependentUpon>AdaptiveContainer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AdaptiveTextBlock.xaml.cs">
+      <DependentUpon>AdaptiveTextBlock.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\AdaptiveTextInput.xaml.cs">
+      <DependentUpon>AdaptiveTextInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Elements\BaseUserControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -131,6 +144,9 @@
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.2.7</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>12.0.2</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\shared\dist\shared.min.js">
@@ -139,10 +155,22 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\shared\dist\shared.js">
-      <Link>Scripts\shared.js</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    <Page Include="Elements\AdaptiveCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Elements\AdaptiveContainer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Elements\AdaptiveTextBlock.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Elements\AdaptiveTextInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

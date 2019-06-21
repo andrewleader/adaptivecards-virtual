@@ -264,8 +264,14 @@ export class ReconcilerUpdatedItemProperties extends ReconcilerChange {
             }
         });
 
+        var id: string | undefined = undefined;
+        try {
+            id = this.id;
+        } catch (err) {}
+
         return {
             "type": "ObjectChanges",
+            "id": id,
             "changes": jsonChanges
         };
     }
