@@ -10,6 +10,7 @@ export class TemplateInstance {
     constructor(templateObj: any, data: any) {
         this._template = new ACTemplating.Template(templateObj);
         this._context.$root = data;
+        this._currExpanded = this._template.expand(this._context);
     }
 
     /* Returns true if transformed has changed */
