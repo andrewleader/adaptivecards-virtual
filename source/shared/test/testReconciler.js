@@ -124,13 +124,53 @@ describe("Test reconciler", function () {
             ]
         })
     });
+
+    it("Test body added", function () {
+        assertReconciliations({
+            original: {
+                "type": "AdaptiveCard"
+            },
+            updated: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "TextBlock",
+                        "text": "Hello world"
+                    }
+                ]
+            },
+            expected: [
+                {
+                    "type": "ObjectChanges",
+                    "changes": {
+                        "body": {
+                            "type": "Array",
+                            "values": [
+                                {
+                                    "type": "Object",
+                                    "props": {
+                                        "type": "TextBlock",
+                                        "text": "Hello world"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        })
+    });
 });
 
 function removeIdFromItem(item) {
-    if (Array.isArray(item)) {
+    if (typeof item === "object" && item !== null) {
         delete item.id;
-    } else if (typeof item === "object" && item !== null) {
-        delete item.id;
+
+        if (item.type == "Array" && Array.isArray(item.values)) {
+            for (var i = 0; i < item.values.length; i++) {
+                removeIdFromItem(item.values[i]);
+            }
+        }
     }
 }
 
