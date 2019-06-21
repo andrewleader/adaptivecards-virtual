@@ -1,0 +1,31 @@
+{
+  "name": "shared",
+  "version": "1.0.0",
+  "description": "Shared JS model for virtualized Adaptive Cards",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewleader/adaptivecards-virtual.git"
+  },
+  "author": "andrewleader",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewleader/adaptivecards-virtual/issues"
+  },
+  "homepage": "https://github.com/andrewleader/adaptivecards-virtual#readme",
+  "dependencies": {
+    "@types/lodash": "^4.14.134",
+    "@types/uuid": "^3.4.4",
+    "adaptivecards-templating": "0.1.0-alpha.0",
+    "lodash": "^4.17.11",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "mocha": "^6.1.4",
+    "typescript": "^3.5.2"
+  }
+}
