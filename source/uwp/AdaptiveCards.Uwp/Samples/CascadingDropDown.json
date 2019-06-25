@@ -1,0 +1,88 @@
+﻿{
+  "type": "AdaptiveCard",
+  "$sampleData": {
+    "makes": [
+      {
+        "title": "Mazda",
+        "models": [
+          "3",
+          "Miata",
+          "RX8"
+        ]
+      },
+      {
+        "title": "Toyota",
+        "models": [
+          "4Runner",
+          "Camry",
+          "Highlander"
+        ]
+      }
+    ]
+  },
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Make"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "id": "make",
+      "style": "compact",
+      "isMultiSelect": false,
+      "choices": [
+        {
+          "$data": "{makes}",
+          "title": "{title}",
+          "value": "{title}"
+        }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "Model"
+    },
+    {
+      "$when": "{inputs.make == 'Mazda'}",
+      "type": "Input.ChoiceSet",
+      "id": "make",
+      "style": "compact",
+      "isMultiSelect": false,
+      "choices": [
+        {
+          "title": "RX8",
+          "value": "rx8"
+        },
+        {
+          "title": "Miata",
+          "value": "miata"
+        },
+        {
+          "title": "3",
+          "value": "3"
+        }
+      ]
+    },
+    {
+      "$when": "{inputs.make == 'toyota'}",
+      "type": "Input.ChoiceSet",
+      "id": "make",
+      "style": "compact",
+      "isMultiSelect": false,
+      "choices": [
+        {
+          "title": "4Runner",
+          "value": "4runner"
+        },
+        {
+          "title": "Camry",
+          "value": "camry"
+        },
+        {
+          "title": "Highlander",
+          "value": "highlander"
+        }
+      ]
+    }
+  ]
+}

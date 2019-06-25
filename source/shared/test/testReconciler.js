@@ -33,7 +33,7 @@ describe("Test reconciler", function () {
         })
     });
 
-    
+
     it("Test type changed inside array", function () {
         assertReconciliations({
             original: {
@@ -79,7 +79,7 @@ describe("Test reconciler", function () {
         })
     });
 
-    
+
     it("Test type changed inside property", function () {
         assertReconciliations({
             original: {
@@ -160,6 +160,77 @@ describe("Test reconciler", function () {
             ]
         })
     });
+
+
+
+    it("Test more advanced body added", function () {
+        assertReconciliations({
+            original: {
+                "type": "AdaptiveCard"
+            },
+            updated: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "Input.ChoiceSet",
+                        "id": "make",
+                        "style": "compact",
+                        "isMultiSelect": false,
+                        "choices": [
+                            {
+                                "title": "Mazda",
+                                "value": "mazda"
+                            },
+                            {
+                                "title": "Toyota",
+                                "value": "toyota"
+                            }
+                        ]
+                    }
+                ]
+            },
+            expected: [
+                {
+                    "type": "ObjectChanges",
+                    "changes": {
+                        "body": {
+                            "type": "Array",
+                            "values": [
+                                {
+                                    "type": "Object",
+                                    "props": {
+                                        "type": "Input.ChoiceSet",
+                                        "id": "make",
+                                        "style": "compact",
+                                        "isMultiSelect": false,
+                                        "choices": {
+                                            "type": "Array",
+                                            "values": [
+                                                {
+                                                    "type": "Object",
+                                                    "props": {
+                                                        "title": "Mazda",
+                                                        "value": "mazda"
+                                                    }
+                                                },
+                                                {
+                                                    "type": "Object",
+                                                    "props": {
+                                                        "title": "Toyota",
+                                                        "value": "toyota"
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            ]
+        })
+    });
 });
 
 function removeIdFromItem(item) {
@@ -169,6 +240,10 @@ function removeIdFromItem(item) {
         if (item.type == "Array" && Array.isArray(item.values)) {
             for (var i = 0; i < item.values.length; i++) {
                 removeIdFromItem(item.values[i]);
+            }
+        } else if (item.type == "Object" && item.props) {
+            for (var key in item.props) {
+                removeIdFromItem(item.props[key]);
             }
         }
     }

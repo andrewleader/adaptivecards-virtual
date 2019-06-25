@@ -30,6 +30,8 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 
         public override void ApplyPropertyChange(string propertyName, JToken value)
         {
+            base.ApplyPropertyChange(propertyName, value);
+
             switch (propertyName)
             {
                 case "items":
@@ -56,6 +58,12 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
                         var textInput = new AdaptiveTextInput();
                         textInput.Initialize(item, Renderer);
                         Items.Add(textInput);
+                        break;
+
+                    case "Input.ChoiceSet":
+                        var choiceSetInput = new AdaptiveChoiceSetInput();
+                        choiceSetInput.Initialize(item, Renderer);
+                        Items.Add(choiceSetInput);
                         break;
                 }
             }

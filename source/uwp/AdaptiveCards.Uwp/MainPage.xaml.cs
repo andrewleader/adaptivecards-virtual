@@ -1,4 +1,5 @@
 ﻿using AdaptiveCards.Rendering.Uwp;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,6 +36,15 @@ namespace AdaptiveCards.Uwp
             Initialize();
         }
 
+        public class Sample
+        {
+            public string Title { get; set; }
+
+            public string Card { get; set; } = "{\n}";
+
+            public string Data { get; set; } = "{\n}";
+        }
+
         private async void Initialize()
         {
             try
@@ -42,11 +52,34 @@ namespace AdaptiveCards.Uwp
                 IsEnabled = false;
 
                 var samples = await Package.Current.InstalledLocation.GetFolderAsync("Samples");
-                var basicCard = await samples.GetFileAsync("Basic.json");
-                var basicCardData = await samples.GetFileAsync("Basic.data.json");
+                var samplesCollection = new List<Sample>();
 
-                TextBoxDataPayload.Text = await FileIO.ReadTextAsync(basicCardData);
-                TextBoxCardPayload.Text = await FileIO.ReadTextAsync(basicCard);
+                foreach (var sample in await samples.GetFilesAsync())
+                {
+                    try
+                    {
+                        var sampleObj = new Sample()
+                        {
+                            Title = sample.Name
+                        };
+
+                        var json = await FileIO.ReadTextAsync(sample);
+                        JObject parsed = JObject.Parse(json);
+
+                        if (parsed.ContainsKey("$sampleData"))
+                        {
+                            sampleObj.Data = parsed.Value<JToken>("$sampleData").ToString();
+                            parsed.Remove("$sampleData");
+                        }
+
+                        sampleObj.Card = parsed.ToString();
+
+                        samplesCollection.Add(sampleObj);
+                    }
+                    catch { }
+                }
+
+                ListViewSamples.ItemsSource = samplesCollection;
 
                 IsEnabled = true;
             }
@@ -105,6 +138,16 @@ namespace AdaptiveCards.Uwp
                     Text = ex.ToString(),
                     TextWrapping = TextWrapping.Wrap
                 };
+            }
+        }
+
+        private void ListViewSamples_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedSample = ListViewSamples.SelectedItem as Sample;
+            if (selectedSample != null)
+            {
+                TextBoxDataPayload.Text = selectedSample.Data;
+                TextBoxCardPayload.Text = selectedSample.Card;
             }
         }
     }

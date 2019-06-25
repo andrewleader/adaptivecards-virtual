@@ -32,6 +32,8 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
                 BodyContainer.Renderer = Renderer;
             }
 
+            base.ApplyPropertyChange(propertyName, value);
+
             switch (propertyName)
             {
                 case "body":

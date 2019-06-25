@@ -29,6 +29,8 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 
         public override void ApplyPropertyChange(string propertyName, JToken value)
         {
+            base.ApplyPropertyChange(propertyName, value);
+
             switch (propertyName)
             {
                 case "id":

@@ -11,6 +11,7 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
     abstract class BaseUserControl : UserControl
     {
         public string Id { get; set; }
+        public string ElementId { get; set; }
         public AdaptiveCardRenderer Renderer { get; set; }
 
         public virtual IEnumerable<BaseUserControl> GetChildren()
@@ -46,7 +47,15 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
             return GetDescendantsAndSelf().FirstOrDefault(i => i.Id == id);
         }
 
-        public abstract void ApplyPropertyChange(string propertyName, JToken value);
+        public virtual void ApplyPropertyChange(string propertyName, JToken value)
+        {
+            switch (propertyName)
+            {
+                case "id":
+                    ElementId = value.Value<string>();
+                    break;
+            }
+        }
 
         public void Initialize(JObject item, AdaptiveCardRenderer renderer)
         {

@@ -1,5 +1,5 @@
 var assert = require("assert");
-var Shared = require("../dist/shared.min");
+require("../dist/shared.min");
 
 var unprocessedChanges = [];
 

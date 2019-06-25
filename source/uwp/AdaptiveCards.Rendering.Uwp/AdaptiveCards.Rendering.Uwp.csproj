@@ -125,6 +125,9 @@
     <Compile Include="Elements\AdaptiveCard.xaml.cs">
       <DependentUpon>AdaptiveCard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Elements\AdaptiveChoiceSetInput.xaml.cs">
+      <DependentUpon>AdaptiveChoiceSetInput.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Elements\AdaptiveContainer.xaml.cs">
       <DependentUpon>AdaptiveContainer.xaml</DependentUpon>
     </Compile>
@@ -156,6 +159,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Elements\AdaptiveCard.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Elements\AdaptiveChoiceSetInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

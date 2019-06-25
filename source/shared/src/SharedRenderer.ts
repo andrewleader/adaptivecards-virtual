@@ -23,10 +23,42 @@ export class SharedRenderer {
             throw new Error("Data JSON was invalid JSON");
         }
 
+        dataObj = {
+            ...dataObj,
+            inputs: this.getInitialInputs(cardObj)
+        };
+
         this._templateInstance = new TemplateInstance(cardObj, dataObj);
 
         var changes = this._reconciler.reconcileToJson(this._templateInstance.expandedTemplate);
         onChanges(changes);
+    }
+
+    getInitialInputs(cardEl: any) {
+        var answer: any = {};
+
+        if (cardEl.type === "Input.Text" || cardEl.type === "Input.ChoiceSet") {
+            answer[cardEl.id] = "";
+        }
+
+        for (var prop in cardEl) {
+            var val = cardEl[prop];
+            if (Array.isArray(val)) {
+                val.forEach(item => {
+                    var subanswer = this.getInitialInputs(item);
+                    for (var subkey in subanswer) {
+                        answer[subkey] = subanswer[subkey];
+                    }
+                });
+            } else if (typeof val === "object" && val !== null) {
+                var subanswer = this.getInitialInputs(val);
+                for (var subkey in subanswer) {
+                    answer[subkey] = subanswer[subkey];
+                }
+            }
+        }
+
+        return answer;
     }
 
     updateInputValue(inputId: string, inputValue: string) {

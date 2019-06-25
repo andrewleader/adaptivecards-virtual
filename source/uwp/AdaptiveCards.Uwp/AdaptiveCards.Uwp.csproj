@@ -129,10 +129,10 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <None Include="AdaptiveCards.Uwp_TemporaryKey.pfx" />
-    <Content Include="Samples\Basic.data.json">
+    <Content Include="Samples\Basic.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Samples\Basic.json">
+    <Content Include="Samples\CascadingDropDown.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
