@@ -1,0 +1,20 @@
+﻿{
+  "type": "AdaptiveCard",
+  "version": "1.2",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Width: {card.width}"
+    },
+    {
+      "$when": "{card.width > 150}",
+      "type": "TextBlock",
+      "text": "When I have a lot of space, I'm going to show a lengthy description"
+    },
+    {
+      "$when": "{card.width <= 150}",
+      "type": "TextBlock",
+      "text": "When narrow, be sweet and short"
+    }
+  ]
+}

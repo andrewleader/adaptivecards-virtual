@@ -24,20 +24,44 @@ namespace AdaptiveCards.Rendering.Uwp
         public AdaptiveCardRenderer()
         {
             _card.Renderer = this;
+            _card.SizeChanged += _card_SizeChanged;
+        }
+
+        private void _card_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (e.NewSize.Width != e.PreviousSize.Width)
+            {
+                UpdateCardWidth(e.NewSize.Width);
+            }
+        }
+
+        private void UpdateCardWidth(double width)
+        {
+            // This logic should be improved to batch changes and whatnot
+            Task.Run(delegate
+            {
+                try
+                {
+                    _scriptEngine.SetGlobalValue("cardWidth", width);
+                    _scriptEngine.Execute("renderer.updateCardWidth(cardWidth);");
+                }
+                catch { }
+            });
         }
 
         public FrameworkElement Render(string cardJson, string dataJson)
         {
             _dispatcher = Window.Current.Dispatcher;
+            var cardWidth = _card.ActualWidth;
             _initialRenderTask = Task.Run(delegate
             {
-                RenderHelper(cardJson, dataJson);
+                RenderHelper(cardJson, dataJson, cardWidth);
             });
 
             return _card;
         }
 
-        private void RenderHelper(string cardJson, string dataJson)
+        private void RenderHelper(string cardJson, string dataJson, double cardWidth)
         {
             try
             {
@@ -59,7 +83,8 @@ namespace AdaptiveCards.Rendering.Uwp
 
                 _scriptEngine.SetGlobalValue("cardJson", cardJson);
                 _scriptEngine.SetGlobalValue("dataJson", dataJson);
-                _scriptEngine.Execute("var renderer = new Shared.SharedRenderer(); renderer.initialize(cardJson, dataJson);");
+                _scriptEngine.SetGlobalValue("cardWidth", cardWidth);
+                _scriptEngine.Execute("var renderer = new Shared.SharedRenderer(); renderer.initialize(cardJson, dataJson, cardWidth);");
             }
             catch (Exception ex)
             {

@@ -9,7 +9,7 @@ export class SharedRenderer {
     });
     private _templateInstance?: TemplateInstance;
 
-    initialize(cardJson: string, dataJson: string) {
+    initialize(cardJson: string, dataJson: string, cardWidth: number) {
         var cardObj;
         try {
             cardObj = JSON.parse(cardJson);
@@ -25,6 +25,9 @@ export class SharedRenderer {
 
         dataObj = {
             ...dataObj,
+            card: {
+                width: cardWidth
+            },
             inputs: this.getInitialInputs(cardObj)
         };
 
@@ -67,6 +70,14 @@ export class SharedRenderer {
 
         this.updateDataHelper({
             "inputs": inputs
+        });
+    }
+
+    updateCardWidth(width: number) {
+        this.updateDataHelper({
+            "card": {
+                "width": width
+            }
         });
     }
 
