@@ -34,6 +34,133 @@ describe("Test reconciler", function () {
     });
 
 
+    it("Test item added to array", function () {
+        assertReconciliations({
+            original: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "TextBlock",
+                        "text": "Hello world"
+                    }
+                ]
+            },
+            updated: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "TextBlock",
+                        "text": "Hello world"
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "I'm new here"
+                    }
+                ]
+            },
+            expected: [
+                {
+                    "type": "ArrayChanges",
+                    "property": "body",
+                    "changes": [
+                        {
+                            "type": "Add",
+                            "index": 1,
+                            "item": {
+                                "type": "Object",
+                                "props": {
+                                    "type": "TextBlock",
+                                    "text": "I'm new here"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        })
+    });
+
+    
+
+
+    it("Test choice set choices added", function () {
+        assertReconciliations({
+            original: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "Input.ChoiceSet",
+                        "choices": []
+                    }
+                ]
+            },
+            updated: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "Input.ChoiceSet",
+                        "choices": [
+                            {
+                                "title": "One",
+                                "value": "one"
+                            },
+                            {
+                                "title": "Two",
+                                "value": "two"
+                            },
+                            {
+                                "title": "Three",
+                                "value": "three"
+                            }
+                        ]
+                    }
+                ]
+            },
+            expected: [
+                {
+                    "type": "ArrayChanges",
+                    "property": "choices",
+                    "changes": [
+                        {
+                            "type": "Add",
+                            "index": 0,
+                            "item": {
+                                "type": "Object",
+                                "props": {
+                                    "title": "One",
+                                    "value": "one"
+                                }
+                            }
+                        },
+                        {
+                            "type": "Add",
+                            "index": 1,
+                            "item": {
+                                "type": "Object",
+                                "props": {
+                                    "title": "Two",
+                                    "value": "two"
+                                }
+                            }
+                        },
+                        {
+                            "type": "Add",
+                            "index": 2,
+                            "item": {
+                                "type": "Object",
+                                "props": {
+                                    "title": "Three",
+                                    "value": "three"
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        })
+    });
+
+
     it("Test type changed inside array", function () {
         assertReconciliations({
             original: {
