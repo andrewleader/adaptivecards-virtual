@@ -125,6 +125,7 @@
     <Compile Include="Elements\AdaptiveCard.xaml.cs">
       <DependentUpon>AdaptiveCard.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Elements\AdaptiveChoice.cs" />
     <Compile Include="Elements\AdaptiveChoiceSetInput.xaml.cs">
       <DependentUpon>AdaptiveChoiceSetInput.xaml</DependentUpon>
     </Compile>

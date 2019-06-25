@@ -1,5 +1,6 @@
 ﻿{
   "type": "AdaptiveCard",
+  "version": "1.2",
   "$sampleData": {
     "makes": [
       {
@@ -43,44 +44,22 @@
       "text": "Model"
     },
     {
-      "$when": "{inputs.make == 'Mazda'}",
       "type": "Input.ChoiceSet",
-      "id": "make",
+      "id": "model",
       "style": "compact",
       "isMultiSelect": false,
       "choices": [
         {
-          "title": "RX8",
-          "value": "rx8"
+          "$when": "{inputs.make == makes[0].title}",
+          "$data": "{makes[0].models}",
+          "title": "{$data}",
+          "value": "{$data}"
         },
         {
-          "title": "Miata",
-          "value": "miata"
-        },
-        {
-          "title": "3",
-          "value": "3"
-        }
-      ]
-    },
-    {
-      "$when": "{inputs.make == 'toyota'}",
-      "type": "Input.ChoiceSet",
-      "id": "make",
-      "style": "compact",
-      "isMultiSelect": false,
-      "choices": [
-        {
-          "title": "4Runner",
-          "value": "4runner"
-        },
-        {
-          "title": "Camry",
-          "value": "camry"
-        },
-        {
-          "title": "Highlander",
-          "value": "highlander"
+          "$when": "{inputs.make == makes[1].title}",
+          "$data": "{makes[1].models}",
+          "title": "{$data}",
+          "value": "{$data}"
         }
       ]
     }

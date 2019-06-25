@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -20,11 +21,7 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 {
     internal sealed partial class AdaptiveChoiceSetInput : BaseUserControl
     {
-        public class Choice
-        {
-            public string Title { get; set; }
-            public string Value { get; set; }
-        }
+        public ObservableCollection<AdaptiveChoice> Choices { get; private set; } = new ObservableCollection<AdaptiveChoice>();
 
         public AdaptiveChoiceSetInput()
         {
@@ -45,16 +42,14 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 
         private void HandleChoicesSet(JArray choices)
         {
-            List<Choice> options = new List<Choice>();
-            foreach (var item in choices.OfType<JObject>().Select(c => c.Value<JObject>("props")))
+            Choices.Clear();
+
+            foreach (var item in choices.OfType<JObject>())
             {
-                options.Add(new Choice()
-                {
-                    Title = item.Value<string>("title"),
-                    Value = item.Value<string>("value")
-                });
+                var choice = new AdaptiveChoice();
+                choice.Initialize(item, Renderer);
+                Choices.Add(choice);
             }
-            ComboBox.ItemsSource = options;
 
             UpdateInputValue();
         }
@@ -66,7 +61,7 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 
         private void UpdateInputValue()
         {
-            var selectedChoice = ComboBox.SelectedItem as Choice;
+            var selectedChoice = ComboBox.SelectedItem as AdaptiveChoice;
             if (selectedChoice != null)
             {
                 Renderer.UpdateInputValue(ElementId, selectedChoice.Value);

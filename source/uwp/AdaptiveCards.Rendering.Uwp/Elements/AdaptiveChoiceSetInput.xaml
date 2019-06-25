@@ -1,4 +1,5 @@
 ﻿<local:BaseUserControl
+    x:Name="ThisElement"
     x:Class="AdaptiveCards.Rendering.Uwp.Elements.AdaptiveChoiceSetInput"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -12,6 +13,7 @@
     <ComboBox
         x:Name="ComboBox"
         HorizontalAlignment="Stretch"
-        DisplayMemberPath="Title"
-        SelectionChanged="ComboBox_SelectionChanged"/>
+        ItemsSource="{Binding Choices, ElementName=ThisElement}"
+        SelectionChanged="ComboBox_SelectionChanged">
+    </ComboBox>
 </local:BaseUserControl>
