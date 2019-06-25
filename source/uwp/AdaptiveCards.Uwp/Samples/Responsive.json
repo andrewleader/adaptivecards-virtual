@@ -7,14 +7,26 @@
       "text": "Width: {card.width}"
     },
     {
-      "$when": "{card.width > 150}",
+      "$when": "{card.width > 450}",
       "type": "TextBlock",
       "text": "When I have a lot of space, I'm going to show a lengthy description"
     },
     {
-      "$when": "{card.width <= 150}",
+      "$when": "{card.width <= 450}",
       "type": "TextBlock",
       "text": "When narrow, be sweet and short"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Text inputs aren't lost..."
+    },
+    {
+      "type": "Input.Text",
+      "id": "name"
+    },
+    {
+      "type": "TextBlock",
+      "text": "You entered: {inputs.name}"
     }
   ]
 }
