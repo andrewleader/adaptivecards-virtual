@@ -181,12 +181,14 @@ export class ReconcilerArrayRemoveChange extends ReconcilerArrayChange {
 }
 
 export class ReconcilerArrayChanges extends ReconcilerChange {
-    private _arrayId: string;
+    private _objectId: string;
     private _changes: ReconcilerArrayChange[] = [];
+    private _property: string;
 
-    constructor(arrayId: string) {
+    constructor(objectId: string, property: string) {
         super();
-        this._arrayId = arrayId;
+        this._objectId = objectId;
+        this._property = property;
     }
 
     add(index: number, item: ReconciledBase) {
@@ -197,7 +199,7 @@ export class ReconcilerArrayChanges extends ReconcilerChange {
         this._changes.push(new ReconcilerArrayRemoveChange(index));
     }
 
-    get id() { return this._arrayId; }
+    get id() { return this._objectId; }
     get changes() { return this._changes; }
 
     hasChanges() {
@@ -224,6 +226,7 @@ export class ReconcilerArrayChanges extends ReconcilerChange {
         return {
             "type": "ArrayChanges",
             "id": this.id,
+            "property": this._property,
             "changes": jsonChanges
         };
     }
@@ -317,7 +320,7 @@ export class Reconciler {
             } else if (existingPropValue instanceof ReconciledObject) {
                 this.reconcileObjectChanges(existingPropValue, newPropValue, changes);
             } else if (existingPropValue instanceof ReconciledArray) {
-                this.reconcileArrayChanges(existingPropValue, newPropValue, changes);
+                this.reconcileArrayChanges(_currReconciledObject.id, p, existingPropValue, newPropValue, changes);
             }
         }
 
@@ -336,8 +339,8 @@ export class Reconciler {
             || (existing instanceof ReconciledObject && existing.getValueTypeName() !== newValue.type);
     }
 
-    private reconcileArrayChanges(_currReconciledArray: ReconciledArray, newArray: any[], changes: ReconcilerChange[]) {
-        var arrayChanges = new ReconcilerArrayChanges(_currReconciledArray.id);
+    private reconcileArrayChanges(parentObjId: string, parentProperty: string, _currReconciledArray: ReconciledArray, newArray: any[], changes: ReconcilerChange[]) {
+        var arrayChanges = new ReconcilerArrayChanges(parentObjId, parentProperty);
 
         var maxLength = Math.max(_currReconciledArray.values.length, newArray.length);
 

@@ -57,6 +57,7 @@ describe("Test reconciler", function () {
             expected: [
                 {
                     "type": "ArrayChanges",
+                    "property": "body",
                     "changes": [
                         {
                             "type": "Remove",
