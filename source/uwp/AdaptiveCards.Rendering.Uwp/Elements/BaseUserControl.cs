@@ -57,6 +57,11 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
             }
         }
 
+        public virtual void ApplyArrayChanges(string propertyName, JArray changes)
+        {
+            // Nothing, extending classes should implement
+        }
+
         public void Initialize(JObject item, AdaptiveCardRenderer renderer)
         {
             Renderer = renderer;

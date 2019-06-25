@@ -112,7 +112,7 @@ namespace AdaptiveCards.Rendering.Uwp
                         break;
 
                     case "ArrayChanges":
-
+                        OnArrayChanges(change);
                         break;
                 }
             }
@@ -133,6 +133,20 @@ namespace AdaptiveCards.Rendering.Uwp
                 {
                     renderedItem.ApplyPropertyChange(prop.Key, prop.Value);
                 }
+            }
+        }
+
+        private void OnArrayChanges(JObject arrayChanges)
+        {
+            string id = arrayChanges.Value<string>("id");
+            var renderedItem = _card.GetById(id);
+            if (renderedItem == null)
+            {
+                renderedItem = _card;
+            }
+            if (renderedItem != null)
+            {
+                renderedItem.ApplyArrayChanges(arrayChanges.Value<string>("property"), arrayChanges.Value<JArray>("changes"));
             }
         }
 

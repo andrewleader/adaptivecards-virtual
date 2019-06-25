@@ -40,6 +40,28 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
             }
         }
 
+        public override void ApplyArrayChanges(string propertyName, JArray changes)
+        {
+            switch (propertyName)
+            {
+                case "choices":
+                    foreach (var change in changes.OfType<JObject>())
+                    {
+                        if (change.Value<string>("type") == "Add")
+                        {
+                            var choice = new AdaptiveChoice();
+                            choice.Initialize(change.Value<JObject>("item"), Renderer);
+                            Choices.Insert(change.Value<int>("index"), choice);
+                        }
+                        else
+                        {
+                            Choices.RemoveAt(change.Value<int>("index"));
+                        }
+                    }
+                    break;
+            }
+        }
+
         private void HandleChoicesSet(JArray choices)
         {
             Choices.Clear();
@@ -51,7 +73,10 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
                 Choices.Add(choice);
             }
 
-            UpdateInputValue();
+            if (ComboBox.SelectedIndex != -1)
+            {
+                UpdateInputValue();
+            }
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
