@@ -96,5 +96,10 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
                 Renderer.UpdateInputValue(ElementId, "");
             }
         }
+
+        public override IEnumerable<BaseUserControl> GetChildren()
+        {
+            return Choices;
+        }
     }
 }
