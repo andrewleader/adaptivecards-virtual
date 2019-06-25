@@ -55,6 +55,28 @@ describe("Test shared renderer", function () {
         renderer.updateInputValue("myInput", "Andrew");
         processChanges(1);
     });
+
+    
+    it("Test input change that uses $when", function () {
+        var renderer = new shared.SharedRenderer();
+        renderer.initialize(JSON.stringify({
+            "type": "AdaptiveCard",
+            "body": [
+                {
+                    "type": "Input.Text",
+                    "id": "myInput"
+                },
+                {
+                    "$when": "{inputs.myInput == 'Andrew'}",
+                    "type": "TextBlock",
+                    "text": "Oh hey Andrew!"
+                }
+            ]
+        }), "{}");
+        processChanges(1);
+        renderer.updateInputValue("myInput", "Andrew");
+        processChanges(1);
+    });
 });
 
 function processChanges(amountToProcess) {
