@@ -97,7 +97,7 @@ namespace AdaptiveCards.Uwp
             {
                 try
                 {
-                    _renderer.UpdateDataPayload(TextBoxDataPayload.Text);
+                    _renderer.UpdateData(TextBoxDataPayload.Text);
                 }
                 catch { }
             }

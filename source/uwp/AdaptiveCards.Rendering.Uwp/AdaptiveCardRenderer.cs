@@ -175,9 +175,17 @@ namespace AdaptiveCards.Rendering.Uwp
             }
         }
 
-        public void UpdateDataPayload(string text)
+        public async void UpdateData(string text)
         {
-
+            await Task.Run(delegate
+            {
+                try
+                {
+                    _scriptEngine.SetGlobalValue("data", text);
+                    _scriptEngine.Execute("renderer.updateData(data);");
+                }
+                catch { }
+            });
         }
     }
 

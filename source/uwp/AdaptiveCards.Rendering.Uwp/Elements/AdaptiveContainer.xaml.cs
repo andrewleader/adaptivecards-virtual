@@ -65,6 +65,12 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
                         choiceSetInput.Initialize(item, Renderer);
                         Items.Add(choiceSetInput);
                         break;
+
+                    case "Progress":
+                        var progress = new AdaptiveProgress();
+                        progress.Initialize(item, Renderer);
+                        Items.Add(progress);
+                        break;
                 }
             }
         }

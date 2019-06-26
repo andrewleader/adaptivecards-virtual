@@ -81,6 +81,10 @@ export class SharedRenderer {
         });
     }
 
+    updateData(data: string) {
+        this.updateDataHelper(JSON.parse(data));
+    }
+
     private updateDataHelper(newData: any) {
         if (this._templateInstance!.updateData(newData)) {
             var changes = this._reconciler.reconcileToJson(this._templateInstance!.expandedTemplate);

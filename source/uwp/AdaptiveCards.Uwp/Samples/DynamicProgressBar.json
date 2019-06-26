@@ -1,0 +1,22 @@
+﻿{
+  "type": "AdaptiveCard",
+  "$sampleData": {
+    "value": 30
+  },
+  "version": "1.2",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Edit the data value and watch the progress bar update",
+      "wrap": true
+    },
+    {
+      "type": "Progress",
+      "value": "{value}"
+    },
+    {
+      "type": "TextBlock",
+      "text": "{if(value < 100, 'Downloading...', 'Downloaded!')}"
+    }
+  ]
+}
