@@ -157,6 +157,7 @@ namespace AdaptiveCards.Uwp
                 });
                 _renderer = new AdaptiveCardRenderer();
                 _renderer.OnCardChanges += _renderer_OnCardChanges;
+                _renderer.OnTransformedTemplateChanged += _renderer_OnTransformedTemplateChanged;
                 CardContainer.Child = _renderer.Render(cardPayload, TextBoxDataPayload.Text);
             }
             catch (Exception ex)
@@ -169,11 +170,19 @@ namespace AdaptiveCards.Uwp
             }
         }
 
-        private void _renderer_OnCardChanges(object sender, string e)
+        private void _renderer_OnTransformedTemplateChanged(object sender, string transformedTemplate)
         {
             DebuggingPage.RunInWindowThread((page) =>
             {
-                page.LatestChange = e;
+                page.TransformedTemplate = transformedTemplate;
+            });
+        }
+
+        private void _renderer_OnCardChanges(object sender, string changes)
+        {
+            DebuggingPage.RunInWindowThread((page) =>
+            {
+                page.LatestChange = changes;
             });
         }
 

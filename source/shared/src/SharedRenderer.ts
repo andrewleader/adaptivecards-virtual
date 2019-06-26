@@ -2,6 +2,7 @@ import { Reconciler, ReconcilerChange } from "./Reconciler";
 import { TemplateInstance } from "./TemplateInstance";
 
 declare function onChanges(changes: string):any;
+declare function onTransformedTemplateChanged(template: string):any;
 
 export class SharedRenderer {
     private _reconciler = new Reconciler({
@@ -32,6 +33,9 @@ export class SharedRenderer {
         };
 
         this._templateInstance = new TemplateInstance(cardObj, dataObj);
+        if (onTransformedTemplateChanged) {
+            onTransformedTemplateChanged(JSON.stringify(this._templateInstance!.expandedTemplate));
+        }
 
         var changes = this._reconciler.reconcileToJson(this._templateInstance.expandedTemplate);
         onChanges(changes);
@@ -87,6 +91,9 @@ export class SharedRenderer {
 
     private updateDataHelper(newData: any) {
         if (this._templateInstance!.updateData(newData)) {
+            if (onTransformedTemplateChanged) {
+                onTransformedTemplateChanged(JSON.stringify(this._templateInstance!.expandedTemplate));
+            }
             var changes = this._reconciler.reconcileToJson(this._templateInstance!.expandedTemplate);
             if (changes.length > 0) {
                 onChanges(changes);
