@@ -141,6 +141,9 @@
     <Content Include="Samples\DynamicProgressBar.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Samples\Survey.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\Default.rd.xml" />

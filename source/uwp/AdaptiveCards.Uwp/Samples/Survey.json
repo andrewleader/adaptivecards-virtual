@@ -1,0 +1,40 @@
+﻿{
+  "type": "AdaptiveCard",
+  "version": "1.2",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "How satisfied are you?"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "id": "satisfaction",
+      "style": "compact",
+      "isMultiSelect": false,
+      "choices": [
+        {
+          "title": "Satisfied",
+          "value": "satisfied"
+        },
+        {
+          "title": "Neutral",
+          "value": "neutral"
+        },
+        {
+          "title": "Dissatisfied",
+          "value": "dissatisfied"
+        }
+      ]
+    },
+    {
+      "$when": "{inputs.satisfaction == 'dissatisfied'}",
+      "type": "TextBlock",
+      "text": "We're sorry you're dissatisfied. Tell us why."
+    },
+    {
+      "$when": "{inputs.satisfaction == 'dissatisfied'}",
+      "type": "Input.Text",
+      "id": "explanation"
+    }
+  ]
+}

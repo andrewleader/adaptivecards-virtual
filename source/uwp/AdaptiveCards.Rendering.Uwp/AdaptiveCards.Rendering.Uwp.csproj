@@ -139,6 +139,7 @@
     <Compile Include="Elements\AdaptiveTextInput.xaml.cs">
       <DependentUpon>AdaptiveTextInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Elements\AdaptiveUnknown.cs" />
     <Compile Include="Elements\BaseUserControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

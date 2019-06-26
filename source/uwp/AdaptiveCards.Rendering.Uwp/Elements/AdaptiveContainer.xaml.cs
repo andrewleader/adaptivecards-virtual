@@ -46,32 +46,58 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 
             foreach (var item in items.OfType<JObject>())
             {
-                switch (item.Value<JObject>("props").Value<string>("type"))
-                {
-                    case "TextBlock":
-                        var tb = new AdaptiveTextBlock();
-                        tb.Initialize(item, Renderer);
-                        Items.Add(tb);
-                        break;
+                var created = CreateItem(item);
+                Items.Add(created);
+            }
+        }
 
-                    case "Input.Text":
-                        var textInput = new AdaptiveTextInput();
-                        textInput.Initialize(item, Renderer);
-                        Items.Add(textInput);
-                        break;
+        private BaseUserControl CreateItem(JObject item)
+        {
+            switch (item.Value<JObject>("props").Value<string>("type"))
+            {
+                case "TextBlock":
+                    var tb = new AdaptiveTextBlock();
+                    tb.Initialize(item, Renderer);
+                    return tb;
 
-                    case "Input.ChoiceSet":
-                        var choiceSetInput = new AdaptiveChoiceSetInput();
-                        choiceSetInput.Initialize(item, Renderer);
-                        Items.Add(choiceSetInput);
-                        break;
+                case "Input.Text":
+                    var textInput = new AdaptiveTextInput();
+                    textInput.Initialize(item, Renderer);
+                    return textInput;
 
-                    case "Progress":
-                        var progress = new AdaptiveProgress();
-                        progress.Initialize(item, Renderer);
-                        Items.Add(progress);
-                        break;
-                }
+                case "Input.ChoiceSet":
+                    var choiceSetInput = new AdaptiveChoiceSetInput();
+                    choiceSetInput.Initialize(item, Renderer);
+                    return choiceSetInput;
+
+                case "Progress":
+                    var progress = new AdaptiveProgress();
+                    progress.Initialize(item, Renderer);
+                    return progress;
+
+                default:
+                    return new AdaptiveUnknown();
+            }
+        }
+
+        public override void ApplyArrayChanges(string propertyName, JArray changes)
+        {
+            switch (propertyName)
+            {
+                case "items":
+                    foreach (var change in changes.OfType<JObject>())
+                    {
+                        if (change.Value<string>("type") == "Add")
+                        {
+                            var created = CreateItem(change.Value<JObject>("item"));
+                            Items.Insert(change.Value<int>("index"), created);
+                        }
+                        else
+                        {
+                            Items.RemoveAt(change.Value<int>("index"));
+                        }
+                    }
+                    break;
             }
         }
 

@@ -364,6 +364,8 @@ export class Reconciler {
                 // Was deleted
                 _currReconciledArray.remove(i);
                 arrayChanges.remove(i);
+                i--;
+                maxLength--;
             } else if (this.shouldSwapValue(existingValue, newValue)) {
                 // Since need to swap, delete and then add
                 var newReconciledValue = ReconciledBase.create(newValue);

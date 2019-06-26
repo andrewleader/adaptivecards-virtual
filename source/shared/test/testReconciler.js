@@ -207,6 +207,56 @@ describe("Test reconciler", function () {
         })
     });
 
+    
+
+
+    it("Test remove multiple", function () {
+        assertReconciliations({
+            original: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "Input.Text",
+                        "id": "name"
+                    },
+                    {
+                        "type": "TextBlock",
+                        "text": "Please explain"
+                    },
+                    {
+                        "type": "Input.Text",
+                        "id": "explanation"
+                    }
+                ]
+            },
+            updated: {
+                "type": "AdaptiveCard",
+                "body": [
+                    {
+                        "type": "Input.Text",
+                        "id": "name"
+                    }
+                ]
+            },
+            expected: [
+                {
+                    "type": "ArrayChanges",
+                    "property": "body",
+                    "changes": [
+                        {
+                            "type": "Remove",
+                            "index": 1
+                        },
+                        {
+                            "type": "Remove",
+                            "index": 1
+                        }
+                    ]
+                }
+            ]
+        })
+    });
+
 
     it("Test type changed inside property", function () {
         assertReconciliations({

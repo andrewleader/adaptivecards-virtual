@@ -46,5 +46,15 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
         {
             return BodyContainer.GetChildren();
         }
+
+        public override void ApplyArrayChanges(string propertyName, JArray changes)
+        {
+            switch (propertyName)
+            {
+                case "body":
+                    BodyContainer.ApplyArrayChanges("items", changes);
+                    break;
+            }
+        }
     }
 }
