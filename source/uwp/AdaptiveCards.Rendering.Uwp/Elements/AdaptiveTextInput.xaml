@@ -11,5 +11,7 @@
 
     <TextBox
         x:Name="TextBox"
-        TextChanged="TextBox_TextChanged"/>
+        TextChanged="TextBox_TextChanged"
+        GotFocus="TextBox_GotFocus"
+        LostFocus="TextBox_LostFocus"/>
 </local:BaseUserControl>

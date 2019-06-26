@@ -1,0 +1,26 @@
+﻿{
+  "type": "AdaptiveCard",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Username"
+    },
+    {
+      "type": "Input.Text",
+      "id": "username"
+    },
+    {
+      "$when": "{inputs.username.focused}",
+      "type": "TextBlock",
+      "text": "Your username must be at least 5 characters long"
+    },
+    {
+      "type": "TextBlock",
+      "text": "Password"
+    },
+    {
+      "type": "Input.Text",
+      "id": "password"
+    }
+  ]
+}

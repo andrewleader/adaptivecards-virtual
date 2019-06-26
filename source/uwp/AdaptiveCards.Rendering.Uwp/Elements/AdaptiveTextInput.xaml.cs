@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -20,8 +21,6 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 {
     internal sealed partial class AdaptiveTextInput : BaseUserControl
     {
-        public string InputId { get; set; }
-
         public AdaptiveTextInput()
         {
             this.InitializeComponent();
@@ -30,18 +29,25 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
         public override void ApplyPropertyChange(string propertyName, JToken value)
         {
             base.ApplyPropertyChange(propertyName, value);
-
-            switch (propertyName)
-            {
-                case "id":
-                    InputId = value.Value<string>();
-                    break;
-            }
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Renderer.UpdateInputValueProperty(InputId, TextBox.Text);
+            Renderer.UpdateInputValueProperty(ElementId, TextBox.Text);
+        }
+
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            dynamic values = new ExpandoObject();
+            values.focused = true;
+            Renderer.UpdateInput(ElementId, values);
+        }
+
+        private void TextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            dynamic values = new ExpandoObject();
+            values.focused = false;
+            Renderer.UpdateInput(ElementId, values);
         }
     }
 }
