@@ -2,6 +2,7 @@ import { Reconciler, ReconcilerChange } from "./Reconciler";
 import { TemplateInstance } from "./TemplateInstance";
 
 declare function onChanges(changes: string): any;
+declare function onVirtualCardChanged(virtualCard: string): any;
 declare function onTransformedTemplateChanged(template: string): any;
 declare function onDataChanged(data: string): any;
 
@@ -42,6 +43,9 @@ export class SharedRenderer {
         }
 
         var changes = this._reconciler.reconcileToJson(this._templateInstance.expandedTemplate);
+        if (onVirtualCardChanged) {
+            onVirtualCardChanged(JSON.stringify(this._reconciler.reconciledCard));
+        }
         onChanges(changes);
     }
 
@@ -100,6 +104,9 @@ export class SharedRenderer {
             }
             var changes = this._reconciler.reconcileToJson(this._templateInstance!.expandedTemplate);
             if (changes.length > 0) {
+                if (onVirtualCardChanged) {
+                    onVirtualCardChanged(JSON.stringify(this._reconciler.reconciledCard));
+                }
                 onChanges(changes);
             }
         }
@@ -112,6 +119,9 @@ export class SharedRenderer {
             }
             var changes = this._reconciler.reconcileToJson(this._templateInstance!.expandedTemplate);
             if (changes.length > 0) {
+                if (onVirtualCardChanged) {
+                    onVirtualCardChanged(JSON.stringify(this._reconciler.reconciledCard));
+                }
                 onChanges(changes);
             }
         }

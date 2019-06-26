@@ -24,6 +24,7 @@ namespace AdaptiveCards.Rendering.Uwp
         public event EventHandler<string> OnCardChanges;
         public event EventHandler<string> OnTransformedTemplateChanged;
         public event EventHandler<string> OnDataChanged;
+        public event EventHandler<string> OnVirtualCardChanged;
 
         public AdaptiveCardRenderer()
         {
@@ -100,6 +101,16 @@ namespace AdaptiveCards.Rendering.Uwp
                     try
                     {
                         OnDataChanged?.Invoke(this, newData);
+                    }
+                    catch { }
+                    return true;
+                }));
+
+                _scriptEngine.SetGlobalFunction("onVirtualCardChanged", new Func<string, bool>((newVirtualCard) =>
+                {
+                    try
+                    {
+                        OnVirtualCardChanged?.Invoke(this, newVirtualCard);
                     }
                     catch { }
                     return true;

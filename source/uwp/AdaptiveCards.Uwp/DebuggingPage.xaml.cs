@@ -90,6 +90,13 @@ namespace AdaptiveCards.Uwp
             set => SetProperty(ref _previousVirtualCard, value);
         }
 
+        private string _currentVirtualCard = "";
+        public string CurrentVirtualCard
+        {
+            get => _currentVirtualCard;
+            set => SetProperty(ref _currentVirtualCard, value);
+        }
+
         private string _latestChange = "";
         public string LatestChange
         {
@@ -102,8 +109,12 @@ namespace AdaptiveCards.Uwp
             if (value is string)
             {
                 // Indent the JSON
-                object indented = JToken.Parse(value as string).ToString();
-                value = (T)indented;
+                try
+                {
+                    object indented = JToken.Parse(value as string).ToString();
+                    value = (T)indented;
+                }
+                catch { }
             }
 
             if (object.Equals(storage, value))
@@ -122,6 +133,12 @@ namespace AdaptiveCards.Uwp
             PreviousVirtualCard = "";
             TransformedTemplate = "";
             Data = "";
+        }
+
+        public void VirtualCardChanged(string newVirtualCard)
+        {
+            PreviousVirtualCard = CurrentVirtualCard;
+            CurrentVirtualCard = newVirtualCard;
         }
     }
 }

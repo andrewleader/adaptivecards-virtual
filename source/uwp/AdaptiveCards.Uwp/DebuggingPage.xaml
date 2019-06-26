@@ -22,6 +22,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid>
             <Grid.RowDefinitions>
@@ -49,9 +50,14 @@
             Text="{x:Bind PreviousVirtualCard, Mode=OneWay}"
             Style="{StaticResource Payload}"/>
         <TextBox
+            Header="Current virtual card"
+            Grid.Column="3"
+            Text="{x:Bind CurrentVirtualCard, Mode=OneWay}"
+            Style="{StaticResource Payload}"/>
+        <TextBox
             x:Name="TextBoxLatestChange"
             Header="Latest change"
-            Grid.Column="3"
+            Grid.Column="4"
             Text="{x:Bind LatestChange, Mode=OneWay}"
             Style="{StaticResource Payload}"/>
     </Grid>

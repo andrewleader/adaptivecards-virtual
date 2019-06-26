@@ -165,6 +165,7 @@ namespace AdaptiveCards.Uwp
                     _renderer.OnCardChanges += _renderer_OnCardChanges;
                     _renderer.OnTransformedTemplateChanged += _renderer_OnTransformedTemplateChanged;
                     _renderer.OnDataChanged += _renderer_OnDataChanged;
+                    _renderer.OnVirtualCardChanged += _renderer_OnVirtualCardChanged;
                     CardContainer.Child = _renderer.Render(cardPayload, TextBoxDataPayload.Text);
                 }
                 else
@@ -182,6 +183,14 @@ namespace AdaptiveCards.Uwp
                     TextWrapping = TextWrapping.Wrap
                 };
             }
+        }
+
+        private void _renderer_OnVirtualCardChanged(object sender, string newVirtualCard)
+        {
+            DebuggingPage.RunInWindowThread((page) =>
+            {
+                page.VirtualCardChanged(newVirtualCard);
+            });
         }
 
         private void _renderer_OnDataChanged(object sender, string data)

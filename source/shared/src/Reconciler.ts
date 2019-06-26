@@ -303,6 +303,10 @@ export class Reconciler {
         return changes;
     }
 
+    get reconciledCard() {
+        return this._currReconciledCard.toJsonObj();
+    }
+
     private reconcileObjectChanges(_currReconciledObject: ReconciledObject, newObject: any, changes: ReconcilerChange[]) {
         var updatedItemChanges = new ReconcilerUpdatedItemProperties(_currReconciledObject.id);
 
