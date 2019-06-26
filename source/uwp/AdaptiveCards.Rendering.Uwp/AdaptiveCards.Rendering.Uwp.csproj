@@ -133,6 +133,7 @@
       <DependentUpon>AdaptiveContainer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Elements\AdaptiveProgress.cs" />
+    <Compile Include="Elements\AdaptiveRatingInput.cs" />
     <Compile Include="Elements\AdaptiveTextBlock.xaml.cs">
       <DependentUpon>AdaptiveTextBlock.xaml</DependentUpon>
     </Compile>

@@ -31,12 +31,12 @@
       ]
     },
     {
-      "$when": "{inputs.project == '__new__'}",
+      "$when": "{inputs.project.value == '__new__'}",
       "type": "TextBlock",
       "text": "New project name"
     },
     {
-      "$when": "{inputs.project == '__new__'}",
+      "$when": "{inputs.project.value == '__new__'}",
       "type": "Input.Text",
       "id": "newProjectName"
     },

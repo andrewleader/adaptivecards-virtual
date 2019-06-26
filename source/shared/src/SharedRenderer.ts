@@ -53,7 +53,15 @@ export class SharedRenderer {
         var answer: any = {};
 
         if (cardEl.type === "Input.Text" || cardEl.type === "Input.ChoiceSet") {
-            answer[cardEl.id] = "";
+            answer[cardEl.id] = {
+                value: ""
+            };
+        }
+
+        else if (cardEl.type === "Input.Rating") {
+            answer[cardEl.id] = {
+                value: 0
+            };
         }
 
         for (var prop in cardEl) {
@@ -78,7 +86,7 @@ export class SharedRenderer {
 
     updateInputValue(inputId: string, inputValue: string) {
         var inputs: any = {};
-        inputs[inputId] = inputValue;
+        inputs[inputId] = JSON.parse(inputValue);
 
         this.updateDataHelper({
             "inputs": inputs

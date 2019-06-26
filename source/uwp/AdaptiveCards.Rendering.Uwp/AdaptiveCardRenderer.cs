@@ -1,8 +1,10 @@
 ﻿using AdaptiveCards.Rendering.Uwp.Elements;
 using Jurassic;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -134,14 +136,23 @@ namespace AdaptiveCards.Rendering.Uwp
             }
         }
 
-        internal async void UpdateInputValue(string inputId, string value)
+        internal void UpdateInputValueProperty(string inputId, object value)
+        {
+            dynamic values = new ExpandoObject();
+            values.value = value;
+            UpdateInput(inputId, values);
+        }
+
+        internal async void UpdateInput(string inputId, object values)
         {
             await Task.Run(delegate
             {
+                string valueJson = JsonConvert.SerializeObject(values);
+
                 try
                 {
                     _scriptEngine.SetGlobalValue("inputId", inputId);
-                    _scriptEngine.SetGlobalValue("inputValue", value);
+                    _scriptEngine.SetGlobalValue("inputValue", valueJson);
                     _scriptEngine.Execute("renderer.updateInputValue(inputId, inputValue);");
                 }
                 catch { }

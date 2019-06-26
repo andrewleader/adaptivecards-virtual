@@ -75,6 +75,11 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
                     progress.Initialize(item, Renderer);
                     return progress;
 
+                case "Input.Rating":
+                    var rating = new AdaptiveRatingInput();
+                    rating.Initialize(item, Renderer);
+                    return rating;
+
                 default:
                     return new AdaptiveUnknown();
             }

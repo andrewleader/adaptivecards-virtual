@@ -41,7 +41,7 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            Renderer.UpdateInputValue(InputId, TextBox.Text);
+            Renderer.UpdateInputValueProperty(InputId, TextBox.Text);
         }
     }
 }

@@ -51,13 +51,13 @@
       "isMultiSelect": false,
       "choices": [
         {
-          "$when": "{inputs.make == makes[0].title}",
+          "$when": "{inputs.make.value == makes[0].title}",
           "$data": "{makes[0].models}",
           "title": "{$data}",
           "value": "{$data}"
         },
         {
-          "$when": "{inputs.make == makes[1].title}",
+          "$when": "{inputs.make.value == makes[1].title}",
           "$data": "{makes[1].models}",
           "title": "{$data}",
           "value": "{$data}"

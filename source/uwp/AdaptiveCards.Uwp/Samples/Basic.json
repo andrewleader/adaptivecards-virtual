@@ -11,7 +11,7 @@
     },
     {
       "type": "TextBlock",
-      "text": "You entered: {inputs.name}"
+      "text": "You entered: {inputs.name.value}"
     }
   ]
 }

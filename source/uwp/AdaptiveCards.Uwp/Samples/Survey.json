@@ -27,12 +27,12 @@
       ]
     },
     {
-      "$when": "{inputs.satisfaction == 'dissatisfied'}",
+      "$when": "{inputs.satisfaction.value == 'dissatisfied'}",
       "type": "TextBlock",
       "text": "We're sorry you're dissatisfied. Tell us why."
     },
     {
-      "$when": "{inputs.satisfaction == 'dissatisfied'}",
+      "$when": "{inputs.satisfaction.value == 'dissatisfied'}",
       "type": "Input.Text",
       "id": "explanation"
     }

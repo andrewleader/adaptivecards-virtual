@@ -89,11 +89,11 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
             var selectedChoice = ComboBox.SelectedItem as AdaptiveChoice;
             if (selectedChoice != null)
             {
-                Renderer.UpdateInputValue(ElementId, selectedChoice.Value);
+                Renderer.UpdateInputValueProperty(ElementId, selectedChoice.Value);
             }
             else
             {
-                Renderer.UpdateInputValue(ElementId, "");
+                Renderer.UpdateInputValueProperty(ElementId, "");
             }
         }
 
