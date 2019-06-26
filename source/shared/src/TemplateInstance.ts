@@ -32,6 +32,11 @@ export class TemplateInstance {
         }
     }
 
+    updateTemplate(templateObj: any) : boolean {
+        this._originalTemplate = templateObj;
+        return this.updateData({});
+    }
+
     get expandedTemplate() {
         return this._currExpanded;
     }

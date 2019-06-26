@@ -129,37 +129,50 @@ namespace AdaptiveCards.Uwp
         private bool _needsRender;
         private async void RequestRender()
         {
-            if (_renderBlocked)
-            {
-                _needsRender = true;
-                return;
-            }
-
-            _renderBlocked = true;
             Render();
-            await Task.Delay(500);
-            _renderBlocked = false;
-            if (_needsRender)
-            {
-                _needsRender = false;
-                RequestRender();
-            }
+            //if (_renderBlocked)
+            //{
+            //    _needsRender = true;
+            //    return;
+            //}
+
+            //_renderBlocked = true;
+            //Render();
+            //await Task.Delay(500);
+            //_renderBlocked = false;
+            //if (_needsRender)
+            //{
+            //    _needsRender = false;
+            //    RequestRender();
+            //}
         }
 
+        private bool _shouldResetData;
         private void Render()
         {
             try
             {
                 var cardPayload = TextBoxCardPayload.Text;
+
                 DebuggingPage.RunInWindowThread((page) =>
                 {
                     page.ResetForNewTemplate(cardPayload);
                 });
-                _renderer = new AdaptiveCardRenderer();
-                _renderer.OnCardChanges += _renderer_OnCardChanges;
-                _renderer.OnTransformedTemplateChanged += _renderer_OnTransformedTemplateChanged;
-                _renderer.OnDataChanged += _renderer_OnDataChanged;
-                CardContainer.Child = _renderer.Render(cardPayload, TextBoxDataPayload.Text);
+
+                if (_renderer == null || _shouldResetData)
+                {
+                    _renderer = new AdaptiveCardRenderer();
+                    _renderer.OnCardChanges += _renderer_OnCardChanges;
+                    _renderer.OnTransformedTemplateChanged += _renderer_OnTransformedTemplateChanged;
+                    _renderer.OnDataChanged += _renderer_OnDataChanged;
+                    CardContainer.Child = _renderer.Render(cardPayload, TextBoxDataPayload.Text);
+                }
+                else
+                {
+                    _renderer.UpdateTemplate(cardPayload);
+                }
+
+                _shouldResetData = false;
             }
             catch (Exception ex)
             {
@@ -200,6 +213,7 @@ namespace AdaptiveCards.Uwp
             var selectedSample = ListViewSamples.SelectedItem as Sample;
             if (selectedSample != null)
             {
+                _shouldResetData = true;
                 TextBoxDataPayload.Text = selectedSample.Data;
                 TextBoxCardPayload.Text = selectedSample.Card;
             }

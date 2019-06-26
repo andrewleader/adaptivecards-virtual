@@ -93,6 +93,18 @@ export class SharedRenderer {
         this.updateDataHelper(JSON.parse(data));
     }
 
+    updateTemplate(template: string) {
+        if (this._templateInstance!.updateTemplate(JSON.parse(template))) {
+            if (onTransformedTemplateChanged) {
+                onTransformedTemplateChanged(JSON.stringify(this._templateInstance!.expandedTemplate));
+            }
+            var changes = this._reconciler.reconcileToJson(this._templateInstance!.expandedTemplate);
+            if (changes.length > 0) {
+                onChanges(changes);
+            }
+        }
+    }
+
     private updateDataHelper(newData: any) {
         if (this._templateInstance!.updateData(newData)) {
             if (onTransformedTemplateChanged) {

@@ -212,6 +212,19 @@ namespace AdaptiveCards.Rendering.Uwp
                 catch { }
             });
         }
+
+        public async void UpdateTemplate(string template)
+        {
+            await Task.Run(delegate
+            {
+                try
+                {
+                    _scriptEngine.SetGlobalValue("template", template);
+                    _scriptEngine.Execute("renderer.updateTemplate(template);");
+                }
+                catch { }
+            });
+        }
     }
 
     internal static class ScriptLoader
