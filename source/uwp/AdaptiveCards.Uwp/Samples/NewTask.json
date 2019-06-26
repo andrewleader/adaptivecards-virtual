@@ -1,0 +1,52 @@
+﻿{
+  "type": "AdaptiveCard",
+  "version": "1.2",
+  "$sampleData": {
+    "projects": [
+      "Adaptive Cards",
+      "Project Rome",
+      "Graph Notifications"
+    ]
+  },
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Project"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "id": "project",
+      "style": "compact",
+      "isMultiSelect": false,
+      "choices": [
+        {
+          "$data": "{projects}",
+          "title": "{$data}",
+          "value": "{$data}"
+        },
+        {
+          "title": "Add new project",
+          "value": "__new__"
+        }
+      ]
+    },
+    {
+      "$when": "{inputs.project == '__new__'}",
+      "type": "TextBlock",
+      "text": "New project name"
+    },
+    {
+      "$when": "{inputs.project == '__new__'}",
+      "type": "Input.Text",
+      "id": "newProjectName"
+    },
+    {
+      "type": "TextBlock",
+      "text": "New task name"
+    },
+    {
+      "type": "Input.Text",
+      "id": "taskName"
+    }
+  ]
+}
