@@ -158,6 +158,7 @@ namespace AdaptiveCards.Uwp
                 _renderer = new AdaptiveCardRenderer();
                 _renderer.OnCardChanges += _renderer_OnCardChanges;
                 _renderer.OnTransformedTemplateChanged += _renderer_OnTransformedTemplateChanged;
+                _renderer.OnDataChanged += _renderer_OnDataChanged;
                 CardContainer.Child = _renderer.Render(cardPayload, TextBoxDataPayload.Text);
             }
             catch (Exception ex)
@@ -168,6 +169,14 @@ namespace AdaptiveCards.Uwp
                     TextWrapping = TextWrapping.Wrap
                 };
             }
+        }
+
+        private void _renderer_OnDataChanged(object sender, string data)
+        {
+            DebuggingPage.RunInWindowThread((page) =>
+            {
+                page.Data = data;
+            });
         }
 
         private void _renderer_OnTransformedTemplateChanged(object sender, string transformedTemplate)

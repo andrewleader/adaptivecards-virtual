@@ -1,8 +1,9 @@
 import { Reconciler, ReconcilerChange } from "./Reconciler";
 import { TemplateInstance } from "./TemplateInstance";
 
-declare function onChanges(changes: string):any;
-declare function onTransformedTemplateChanged(template: string):any;
+declare function onChanges(changes: string): any;
+declare function onTransformedTemplateChanged(template: string): any;
+declare function onDataChanged(data: string): any;
 
 export class SharedRenderer {
     private _reconciler = new Reconciler({
@@ -33,6 +34,9 @@ export class SharedRenderer {
         };
 
         this._templateInstance = new TemplateInstance(cardObj, dataObj);
+        if (onDataChanged) {
+            onDataChanged(JSON.stringify(dataObj));
+        }
         if (onTransformedTemplateChanged) {
             onTransformedTemplateChanged(JSON.stringify(this._templateInstance!.expandedTemplate));
         }
@@ -69,7 +73,7 @@ export class SharedRenderer {
     }
 
     updateInputValue(inputId: string, inputValue: string) {
-        var inputs:any = {};
+        var inputs: any = {};
         inputs[inputId] = inputValue;
 
         this.updateDataHelper({
@@ -98,6 +102,9 @@ export class SharedRenderer {
             if (changes.length > 0) {
                 onChanges(changes);
             }
+        }
+        if (onDataChanged) {
+            onDataChanged(JSON.stringify(this._templateInstance!.data));
         }
     }
 }

@@ -35,4 +35,8 @@ export class TemplateInstance {
     get expandedTemplate() {
         return this._currExpanded;
     }
+
+    get data() {
+        return this._context.$root;
+    }
 }

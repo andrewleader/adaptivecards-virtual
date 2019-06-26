@@ -23,7 +23,7 @@ namespace AdaptiveCards.Rendering.Uwp
 
         public event EventHandler<string> OnCardChanges;
         public event EventHandler<string> OnTransformedTemplateChanged;
-        public event EventHandler<string> OnDataChanges;
+        public event EventHandler<string> OnDataChanged;
 
         public AdaptiveCardRenderer()
         {
@@ -90,6 +90,16 @@ namespace AdaptiveCards.Rendering.Uwp
                     try
                     {
                         OnTransformedTemplateChanged?.Invoke(this, newTemplate);
+                    }
+                    catch { }
+                    return true;
+                }));
+
+                _scriptEngine.SetGlobalFunction("onDataChanged", new Func<string, bool>((newData) =>
+                {
+                    try
+                    {
+                        OnDataChanged?.Invoke(this, newData);
                     }
                     catch { }
                     return true;
