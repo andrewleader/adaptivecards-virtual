@@ -7,9 +7,11 @@ using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -81,9 +83,29 @@ namespace AdaptiveCards.Uwp
 
                 ListViewSamples.ItemsSource = samplesCollection;
 
+                await ShowDebugWindowAsync();
+
                 IsEnabled = true;
             }
             catch { }
+        }
+
+        private CoreApplicationView _debugView;
+        private int _debugViewId;
+        private async Task ShowDebugWindowAsync(bool bringToForeground = false)
+        {
+            _debugView = CoreApplication.CreateNewView();
+            await _debugView.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, delegate
+            {
+                Frame frame = new Frame();
+                frame.Navigate(typeof(DebuggingPage), null);
+                Window.Current.Content = frame;
+                Window.Current.Activate();
+
+                _debugViewId = ApplicationView.GetForCurrentView().Id;
+            });
+
+            await ApplicationViewSwitcher.TryShowAsStandaloneAsync(_debugViewId);
         }
 
         private void TextBoxCardPayload_TextChanged(object sender, TextChangedEventArgs e)
@@ -128,8 +150,14 @@ namespace AdaptiveCards.Uwp
         {
             try
             {
+                var cardPayload = TextBoxCardPayload.Text;
+                DebuggingPage.RunInWindowThread((page) =>
+                {
+                    page.ResetForNewTemplate(cardPayload);
+                });
                 _renderer = new AdaptiveCardRenderer();
-                CardContainer.Child = _renderer.Render(TextBoxCardPayload.Text, TextBoxDataPayload.Text);
+                _renderer.OnCardChanges += _renderer_OnCardChanges;
+                CardContainer.Child = _renderer.Render(cardPayload, TextBoxDataPayload.Text);
             }
             catch (Exception ex)
             {
@@ -139,6 +167,14 @@ namespace AdaptiveCards.Uwp
                     TextWrapping = TextWrapping.Wrap
                 };
             }
+        }
+
+        private void _renderer_OnCardChanges(object sender, string e)
+        {
+            DebuggingPage.RunInWindowThread((page) =>
+            {
+                page.LatestChange = e;
+            });
         }
 
         private void ListViewSamples_SelectionChanged(object sender, SelectionChangedEventArgs e)

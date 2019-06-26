@@ -21,6 +21,9 @@ namespace AdaptiveCards.Rendering.Uwp
         private AdaptiveCard _card = new AdaptiveCard();
         private CoreDispatcher _dispatcher;
 
+        public event EventHandler<string> OnCardChanges;
+        public event EventHandler<string> OnDataChanges;
+
         public AdaptiveCardRenderer()
         {
             _card.Renderer = this;
@@ -117,6 +120,7 @@ namespace AdaptiveCards.Rendering.Uwp
         {
             try
             {
+                OnCardChanges?.Invoke(this, changesAsJson);
                 JArray changes = JArray.Parse(changesAsJson);
                 OnChanges(changes);
             }

@@ -1,0 +1,58 @@
+﻿<Page
+    x:Class="AdaptiveCards.Uwp.DebuggingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:AdaptiveCards.Uwp"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Page.Resources>
+        <Style x:Key="Payload" TargetType="TextBox">
+            <Setter Property="IsReadOnly" Value="True"/>
+            <Setter Property="Margin" Value="12"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Margin="12">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="1.3*"/>
+            </Grid.RowDefinitions>
+            <TextBox
+                Header="Template"
+                Text="{x:Bind CardTemplate, Mode=OneWay}"
+                Style="{StaticResource Payload}"/>
+            <TextBox
+                Header="Data"
+                Grid.Row="1"
+                Text="{x:Bind Data, Mode=OneWay}"
+                Style="{StaticResource Payload}"/>
+        </Grid>
+        <TextBox
+            Header="Transformed template"
+            Grid.Column="1"
+            Text="{x:Bind TransformedTemplate, Mode=OneWay}"
+            Style="{StaticResource Payload}"/>
+        <TextBox
+            Header="Previous virtual card"
+            Grid.Column="2"
+            Text="{x:Bind PreviousVirtualCard, Mode=OneWay}"
+            Style="{StaticResource Payload}"/>
+        <TextBox
+            x:Name="TextBoxLatestChange"
+            Header="Latest change"
+            Grid.Column="3"
+            Text="{x:Bind LatestChange, Mode=OneWay}"
+            Style="{StaticResource Payload}"/>
+    </Grid>
+</Page>
