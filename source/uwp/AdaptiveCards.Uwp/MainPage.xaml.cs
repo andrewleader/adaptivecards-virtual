@@ -142,21 +142,6 @@ namespace AdaptiveCards.Uwp
         private async void RequestRender()
         {
             Render();
-            //if (_renderBlocked)
-            //{
-            //    _needsRender = true;
-            //    return;
-            //}
-
-            //_renderBlocked = true;
-            //Render();
-            //await Task.Delay(500);
-            //_renderBlocked = false;
-            //if (_needsRender)
-            //{
-            //    _needsRender = false;
-            //    RequestRender();
-            //}
         }
 
         private bool _shouldResetData;
