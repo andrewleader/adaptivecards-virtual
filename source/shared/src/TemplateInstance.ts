@@ -10,7 +10,6 @@ export class TemplateInstance {
     private _template: ACTemplating.Template;
     private _context: ACTemplating.EvaluationContext = new ACTemplating.EvaluationContext();
     private _currExpanded: any;
-    private _urlCache: Map<string, any> = new Map<string, any>();
     private _renderer: SharedRenderer;
 
     constructor(templateObj: any, data: any, renderer: SharedRenderer) {
@@ -21,22 +20,7 @@ export class TemplateInstance {
 
         this._context.registerFunction("get", (url: string) =>
         {
-            if (this._urlCache.has(url)) {
-                return this._urlCache.get(url);
-            } else {
-                this._urlCache.set(url, null);
-                try {
-                    var xhttp = new XMLHttpRequest();
-                    xhttp.addEventListener("load", () => {
-                        this._urlCache.set(url, JSON.parse(xhttp.responseText));
-                        this._renderer.updateData("{}");
-                    });
-                    xhttp.open("GET", url);
-                    xhttp.send();
-                } catch (err) {
-                    return JSON.stringify(err);
-                }
-            }
+            return this._renderer.get(url);
         });
 
         this._currExpanded = this._template.expand(this._context);

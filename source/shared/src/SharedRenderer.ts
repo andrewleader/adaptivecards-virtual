@@ -5,12 +5,16 @@ declare function onChanges(changes: string): any;
 declare function onVirtualCardChanged(virtualCard: string): any;
 declare function onTransformedTemplateChanged(template: string): any;
 declare function onDataChanged(data: string): any;
+declare function get(url: string): void;
+
+declare var XMLHttpRequest: any;
 
 export class SharedRenderer {
     private _reconciler = new Reconciler({
         "type": "AdaptiveCard"
     });
     private _templateInstance?: TemplateInstance;
+    private _urlCache: Map<string, any> = new Map<string, any>();
 
     initialize(cardJson: string, dataJson: string, cardWidth: number) {
         var cardObj;
@@ -118,6 +122,34 @@ export class SharedRenderer {
                 onChanges(changes);
             }
         }
+    }
+
+    get(url: string) {
+        if (this._urlCache.has(url)) {
+            return this._urlCache.get(url);
+        } else {
+            this._urlCache.set(url, null);
+            if (get) {
+                get(url);
+            } else {
+                try {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.addEventListener("load", () => {
+                        this.gotHttpResponse(url, xhttp.responseText);
+                    });
+                    xhttp.open("GET", url);
+                    xhttp.send();
+                } catch (err) {
+                    return JSON.stringify(err);
+                }
+            }
+            return undefined;
+        }
+    }
+
+    gotHttpResponse(url: string, response: string) {
+        this._urlCache.set(url, JSON.parse(response));
+        this.updateData("{}");
     }
 
     private updateDataHelper(newData: any) {

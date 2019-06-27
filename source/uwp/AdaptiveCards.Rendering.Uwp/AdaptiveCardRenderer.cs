@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -75,6 +76,12 @@ namespace AdaptiveCards.Rendering.Uwp
                 _scriptEngine = new ScriptEngine();
                 _scriptEngine.Execute(ScriptLoader.GetScript());
 
+                _scriptEngine.SetGlobalFunction("get", new Func<string, bool>((url) =>
+                {
+                    HttpGet(url);
+                    return true;
+                }));
+
                 _scriptEngine.SetGlobalFunction("onChanges", new Func<string, bool>((changesAsJson) =>
                 {
                     var dontWait = _dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, delegate
@@ -134,6 +141,23 @@ namespace AdaptiveCards.Rendering.Uwp
                     catch { }
                 });
             }
+        }
+
+        private async void HttpGet(string url)
+        {
+            var client = new HttpClient();
+            string answer;
+            try
+            {
+                answer = await client.GetStringAsync(url);
+            }
+            catch (Exception ex)
+            {
+                answer = ex.ToString();
+            }
+            _scriptEngine.SetGlobalValue("url", url);
+            _scriptEngine.SetGlobalValue("response", answer);
+            _scriptEngine.Execute("renderer.gotHttpResponse(url, response);");
         }
 
         internal void UpdateInputValueProperty(string inputId, object value)
