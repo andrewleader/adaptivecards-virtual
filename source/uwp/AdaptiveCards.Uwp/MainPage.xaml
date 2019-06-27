@@ -40,6 +40,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition x:Name="CardScriptRow" Height="0"/>
             </Grid.RowDefinitions>
             <ScrollViewer Background="LightGray">
                 <Border
@@ -52,6 +53,13 @@
                 Grid.Row="1"
                 Margin="12"
                 TextChanged="TextBoxDataPayload_TextChanged"
+                AcceptsReturn="True"/>
+
+            <TextBox
+                x:Name="CardScript"
+                Grid.Row="2"
+                Margin="12"
+                IsReadOnly="True"
                 AcceptsReturn="True"/>
         </Grid>
     </Grid>

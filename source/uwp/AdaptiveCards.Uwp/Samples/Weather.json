@@ -1,0 +1,20 @@
+﻿{
+  "type": "AdaptiveCard",
+  "version": "1.2",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Weather forecast for {forecast.name}"
+    },
+    {
+      "type": "TextBlock",
+      "$data": "{forecast}",
+      "text": "Right now it's {weather[0].description} with a temperature of {main.temp}."
+    },
+    {
+      "type": "TextBlock",
+      "$data": "{forecast.main}",
+      "text": "Today will have a high of {temp_max} and a low of {temp_min}."
+    }
+  ]
+}

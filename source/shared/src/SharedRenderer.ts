@@ -8,6 +8,7 @@ declare function onDataChanged(data: string): any;
 declare function get(url: string): void;
 
 declare var XMLHttpRequest: any;
+declare function exec(script: string): void;
 
 export class SharedRenderer {
     private _reconciler = new Reconciler({
@@ -16,7 +17,7 @@ export class SharedRenderer {
     private _templateInstance?: TemplateInstance;
     private _urlCache: Map<string, any> = new Map<string, any>();
 
-    initialize(cardJson: string, dataJson: string, cardWidth: number) {
+    initialize(cardJson: string, dataJson: string, cardScript: string, cardWidth: number) {
         var cardObj;
         try {
             cardObj = JSON.parse(cardJson);
@@ -51,6 +52,10 @@ export class SharedRenderer {
             onVirtualCardChanged(JSON.stringify(this._reconciler.reconciledCard));
         }
         onChanges(changes);
+
+        if (cardScript.length > 0) {
+            exec(cardScript);
+        }
     }
 
     getInitialInputs(cardEl: any) {

@@ -45,6 +45,8 @@ namespace AdaptiveCards.Uwp
             public string Card { get; set; } = "{\n}";
 
             public string Data { get; set; } = "{\n}";
+
+            public string CardScript { get; set; } = "";
         }
 
         private async void Initialize()
@@ -60,23 +62,33 @@ namespace AdaptiveCards.Uwp
                 {
                     try
                     {
-                        var sampleObj = new Sample()
+                        if (sample.FileType == ".json")
                         {
-                            Title = sample.Name
-                        };
+                            var sampleObj = new Sample()
+                            {
+                                Title = sample.Name
+                            };
 
-                        var json = await FileIO.ReadTextAsync(sample);
-                        JObject parsed = JObject.Parse(json);
+                            var json = await FileIO.ReadTextAsync(sample);
+                            JObject parsed = JObject.Parse(json);
 
-                        if (parsed.ContainsKey("$sampleData"))
-                        {
-                            sampleObj.Data = parsed.Value<JToken>("$sampleData").ToString();
-                            parsed.Remove("$sampleData");
+                            if (parsed.ContainsKey("$sampleData"))
+                            {
+                                sampleObj.Data = parsed.Value<JToken>("$sampleData").ToString();
+                                parsed.Remove("$sampleData");
+                            }
+
+                            sampleObj.Card = parsed.ToString();
+
+                            try
+                            {
+                                var cardScriptFile = await samples.GetFileAsync(sample.Name.Substring(0, sample.Name.Length - sample.FileType.Length) + ".js");
+                                sampleObj.CardScript = await FileIO.ReadTextAsync(cardScriptFile);
+                            }
+                            catch { }
+
+                            samplesCollection.Add(sampleObj);
                         }
-
-                        sampleObj.Card = parsed.ToString();
-
-                        samplesCollection.Add(sampleObj);
                     }
                     catch { }
                 }
@@ -166,7 +178,7 @@ namespace AdaptiveCards.Uwp
                     _renderer.OnTransformedTemplateChanged += _renderer_OnTransformedTemplateChanged;
                     _renderer.OnDataChanged += _renderer_OnDataChanged;
                     _renderer.OnVirtualCardChanged += _renderer_OnVirtualCardChanged;
-                    CardContainer.Child = _renderer.Render(cardPayload, TextBoxDataPayload.Text);
+                    CardContainer.Child = _renderer.Render(cardPayload, TextBoxDataPayload.Text, CardScript.Text);
                 }
                 else
                 {
@@ -223,6 +235,15 @@ namespace AdaptiveCards.Uwp
             if (selectedSample != null)
             {
                 _shouldResetData = true;
+                CardScript.Text = selectedSample.CardScript;
+                if (CardScript.Text.Length > 0)
+                {
+                    CardScriptRow.Height = new GridLength(1, GridUnitType.Star);
+                }
+                else
+                {
+                    CardScriptRow.Height = new GridLength(0);
+                }
                 TextBoxDataPayload.Text = selectedSample.Data;
                 TextBoxCardPayload.Text = selectedSample.Card;
             }

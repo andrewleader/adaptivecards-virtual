@@ -57,19 +57,19 @@ namespace AdaptiveCards.Rendering.Uwp
             });
         }
 
-        public FrameworkElement Render(string cardJson, string dataJson)
+        public FrameworkElement Render(string cardJson, string dataJson, string cardScript)
         {
             _dispatcher = Window.Current.Dispatcher;
             var cardWidth = _card.ActualWidth;
             _initialRenderTask = Task.Run(delegate
             {
-                RenderHelper(cardJson, dataJson, cardWidth);
+                RenderHelper(cardJson, dataJson, cardScript, cardWidth);
             });
 
             return _card;
         }
 
-        private void RenderHelper(string cardJson, string dataJson, double cardWidth)
+        private void RenderHelper(string cardJson, string dataJson, string cardScript, double cardWidth)
         {
             try
             {
@@ -81,6 +81,41 @@ namespace AdaptiveCards.Rendering.Uwp
                     HttpGet(url);
                     return true;
                 }));
+
+                _scriptEngine.SetGlobalFunction("exec", new Func<string, object>((script) =>
+                {
+                    try
+                    {
+                        _scriptEngine.Execute(script);
+                    }
+                    catch { }
+                    return null;
+                }));
+
+                _scriptEngine.SetGlobalFunction("getBlocking", new Func<string, string>((url) =>
+                {
+                    var client = new HttpClient();
+                    string answer;
+                    try
+                    {
+                        var task = client.GetStringAsync(url);
+                        task.Wait();
+                        answer = task.Result;
+                    }
+                    catch (Exception ex)
+                    {
+                        answer = ex.ToString();
+                    }
+                    return answer;
+                }));
+
+                _scriptEngine.Execute("var setData = function(data) { renderer.updateData(JSON.stringify(data)); }");
+                //_scriptEngine.SetGlobalFunction("setData", new Func<object, object>((data) =>
+                //{
+                //    _scriptEngine.SetGlobalValue("dataObj", data);
+                //    _scriptEngine.Execute("renderer.updateData(JSON.stringify(dataObj));");
+                //    return null;
+                //}));
 
                 _scriptEngine.SetGlobalFunction("onChanges", new Func<string, bool>((changesAsJson) =>
                 {
@@ -127,8 +162,9 @@ namespace AdaptiveCards.Rendering.Uwp
 
                 _scriptEngine.SetGlobalValue("cardJson", cardJson);
                 _scriptEngine.SetGlobalValue("dataJson", dataJson);
+                _scriptEngine.SetGlobalValue("cardScript", cardScript);
                 _scriptEngine.SetGlobalValue("cardWidth", cardWidth);
-                _scriptEngine.Execute("var renderer = new Shared.SharedRenderer(); renderer.initialize(cardJson, dataJson, cardWidth);");
+                _scriptEngine.Execute("var renderer = new Shared.SharedRenderer(); renderer.initialize(cardJson, dataJson, cardScript, cardWidth);");
             }
             catch (Exception ex)
             {
