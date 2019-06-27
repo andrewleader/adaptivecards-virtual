@@ -1,17 +1,44 @@
 import * as ACTemplating from "adaptivecards-templating";
 import * as helpers from "./helpers";
 import isEqual from "deep-equal";
+import { SharedRenderer } from "./SharedRenderer";
+
+declare var XMLHttpRequest: any;
 
 export class TemplateInstance {
     private _originalTemplate: any;
     private _template: ACTemplating.Template;
     private _context: ACTemplating.EvaluationContext = new ACTemplating.EvaluationContext();
     private _currExpanded: any;
+    private _urlCache: Map<string, any> = new Map<string, any>();
+    private _renderer: SharedRenderer;
 
-    constructor(templateObj: any, data: any) {
+    constructor(templateObj: any, data: any, renderer: SharedRenderer) {
+        this._renderer = renderer;
         this._originalTemplate = templateObj;
         this._template = new ACTemplating.Template(templateObj);
         this._context.$root = data;
+
+        this._context.registerFunction("get", (url: string) =>
+        {
+            if (this._urlCache.has(url)) {
+                return this._urlCache.get(url);
+            } else {
+                this._urlCache.set(url, null);
+                try {
+                    var xhttp = new XMLHttpRequest();
+                    xhttp.addEventListener("load", () => {
+                        this._urlCache.set(url, JSON.parse(xhttp.responseText));
+                        this._renderer.updateData("{}");
+                    });
+                    xhttp.open("GET", url);
+                    xhttp.send();
+                } catch (err) {
+                    return JSON.stringify(err);
+                }
+            }
+        });
+
         this._currExpanded = this._template.expand(this._context);
     }
 

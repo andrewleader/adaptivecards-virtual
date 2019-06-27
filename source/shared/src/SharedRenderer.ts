@@ -34,7 +34,7 @@ export class SharedRenderer {
             inputs: this.getInitialInputs(cardObj)
         };
 
-        this._templateInstance = new TemplateInstance(cardObj, dataObj);
+        this._templateInstance = new TemplateInstance(cardObj, dataObj, this);
         if (onDataChanged) {
             onDataChanged(JSON.stringify(dataObj));
         }

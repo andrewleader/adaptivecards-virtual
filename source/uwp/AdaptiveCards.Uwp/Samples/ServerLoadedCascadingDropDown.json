@@ -1,0 +1,69 @@
+﻿{
+  "type": "AdaptiveCard",
+  "version": "1.2",
+  "$sampleData": {
+    "makes": [
+      {
+        "title": "Honda",
+        "models": "https://raw.githubusercontent.com/andrewleader/adaptivecards-virtual/dataSources/dataSources/carModels/honda.json"
+      },
+      {
+        "title": "Mazda",
+        "models": "https://raw.githubusercontent.com/andrewleader/adaptivecards-virtual/dataSources/dataSources/carModels/mazda.json"
+      },
+      {
+        "title": "Toyota",
+        "models": "https://raw.githubusercontent.com/andrewleader/adaptivecards-virtual/dataSources/dataSources/carModels/toyota.json"
+      }
+    ]
+  },
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Make"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "id": "make",
+      "style": "compact",
+      "isMultiSelect": false,
+      "choices": [
+        {
+          "$data": "{makes}",
+          "title": "{title}",
+          "value": "{title}"
+        }
+      ]
+    },
+    {
+      "type": "TextBlock",
+      "text": "Model {get(makes[0].models)}"
+    },
+    {
+      "type": "Input.ChoiceSet",
+      "id": "model",
+      "style": "compact",
+      "isMultiSelect": false,
+      "choices": [
+        {
+          "$when": "{inputs.make.value == makes[0].title}",
+          "$data": "{get(makes[0].models)}",
+          "title": "{$data}",
+          "value": "{$data}"
+        },
+        {
+          "$when": "{inputs.make.value == makes[1].title}",
+          "$data": "{get(makes[1].models)}",
+          "title": "{$data}",
+          "value": "{$data}"
+        },
+        {
+          "$when": "{inputs.make.value == makes[2].title}",
+          "$data": "{get(makes[2].models)}",
+          "title": "{$data}",
+          "value": "{$data}"
+        }
+      ]
+    }
+  ]
+}
