@@ -44,6 +44,8 @@ export abstract class ReconciledBase {
                 throw new Error("Unknown type");
         }
     }
+
+    abstract getById(id: string): ReconciledObject | undefined;
 }
 
 export class ReconciledObject extends ReconciledBase {
@@ -92,6 +94,22 @@ export class ReconciledObject extends ReconciledBase {
             "props": jsonProps
         };
     }
+
+    getById(id: string): ReconciledObject | undefined {
+        if (this.id == id) {
+            return this;
+        }
+
+        var answer: ReconciledObject | undefined;
+
+        this._props.forEach(value => {
+            if (answer == undefined) {
+                answer = value.getById(id);
+            }
+        });
+
+        return answer;
+    }
 }
 
 export class ReconciledLiteral extends ReconciledBase {
@@ -108,6 +126,10 @@ export class ReconciledLiteral extends ReconciledBase {
 
     toJsonObj() {
         return this.value;
+    }
+
+    getById(id: string): ReconciledObject | undefined {
+        return undefined;
     }
 }
 
@@ -149,6 +171,16 @@ export class ReconciledArray extends ReconciledBase {
             "id": this.id,
             "values": jsonValues
         };
+    }
+
+    getById(id: string): ReconciledObject | undefined {
+        for (var i = 0; i < this._values.length; i++) {
+            var answer = this._values[i].getById(id);
+            if (answer) {
+                return answer;
+            }
+        }
+        return undefined;
     }
 }
 
@@ -305,6 +337,10 @@ export class Reconciler {
 
     get reconciledCard() {
         return this._currReconciledCard.toJsonObj();
+    }
+
+    get reconciledCardObj() {
+        return this._currReconciledCard;
     }
 
     private reconcileObjectChanges(_currReconciledObject: ReconciledObject, newObject: any, changes: ReconcilerChange[]) {

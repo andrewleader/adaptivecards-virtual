@@ -1,4 +1,4 @@
-import { Reconciler, ReconcilerChange } from "./Reconciler";
+import { Reconciler, ReconcilerChange, ReconciledLiteral } from "./Reconciler";
 import { TemplateInstance } from "./TemplateInstance";
 
 declare function onChanges(changes: string): any;
@@ -177,5 +177,31 @@ export class SharedRenderer {
         if (onDataChanged) {
             onDataChanged(JSON.stringify(this._templateInstance!.data));
         }
+    }
+
+    executeAction(id: string) {
+        try {
+            var action = this.getById(id);
+            if (action == undefined) {
+                return;
+            }
+            switch (action.getValueTypeName()) {
+                case "Action.RunScript":
+                    var scriptPropVal = action.getProp("script");
+                    if (scriptPropVal instanceof ReconciledLiteral) {
+                        var script:string = scriptPropVal.value;
+                        exec(script);
+                    }
+                    break;
+            }
+        } catch (err) {}
+    }
+
+    getData(): any {
+        return this._templateInstance!.data;
+    }
+
+    private getById(id: string) {
+        return this._reconciler.reconciledCardObj.getById(id);
     }
 }

@@ -29,6 +29,12 @@ namespace AdaptiveCards.Rendering.Uwp
         public event EventHandler<string> OnDataChanged;
         public event EventHandler<string> OnVirtualCardChanged;
 
+        internal void ExecuteAction(string id)
+        {
+            _scriptEngine.SetGlobalValue("id", id);
+            _scriptEngine.Execute("renderer.executeAction(id);");
+        }
+
         public AdaptiveCardRenderer()
         {
             _card.Renderer = this;
@@ -110,12 +116,7 @@ namespace AdaptiveCards.Rendering.Uwp
                 }));
 
                 _scriptEngine.Execute("var setData = function(data) { renderer.updateData(JSON.stringify(data)); }");
-                //_scriptEngine.SetGlobalFunction("setData", new Func<object, object>((data) =>
-                //{
-                //    _scriptEngine.SetGlobalValue("dataObj", data);
-                //    _scriptEngine.Execute("renderer.updateData(JSON.stringify(dataObj));");
-                //    return null;
-                //}));
+                _scriptEngine.Execute("var getData = function() { return renderer.getData(); }");
 
                 _scriptEngine.SetGlobalFunction("onChanges", new Func<string, bool>((changesAsJson) =>
                 {

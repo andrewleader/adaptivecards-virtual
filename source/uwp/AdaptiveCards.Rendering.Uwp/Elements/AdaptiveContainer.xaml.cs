@@ -53,7 +53,8 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
 
         private BaseUserControl CreateItem(JObject item)
         {
-            switch (item.Value<JObject>("props").Value<string>("type"))
+            string type = item.Value<JObject>("props").Value<string>("type");
+            switch (type)
             {
                 case "TextBlock":
                     var tb = new AdaptiveTextBlock();
@@ -86,6 +87,12 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
                     return container;
 
                 default:
+                    if (type.StartsWith("Action."))
+                    {
+                        var action = new AdaptiveAction();
+                        action.Initialize(item, Renderer);
+                        return action;
+                    }
                     return new AdaptiveUnknown();
             }
         }

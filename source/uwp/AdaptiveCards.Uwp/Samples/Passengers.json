@@ -1,0 +1,27 @@
+﻿{
+  "type": "AdaptiveCard",
+  "version": "1.0",
+  "$sampleData": {
+    "passengers": [
+      {}
+    ]
+  },
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Passengers"
+    },
+    {
+      "$data": "{passengers}",
+      "type": "Input.Text",
+      "title": "New Input.Toggle",
+      "id": "passenger{$index}",
+      "placeholder": "Name"
+    },
+    {
+      "type": "Action.RunScript",
+      "title": "Add passenger",
+      "script": "addPassenger()"
+    }
+  ]
+}

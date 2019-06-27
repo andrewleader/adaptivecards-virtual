@@ -122,6 +122,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="AdaptiveCardRenderer.cs" />
+    <Compile Include="Elements\AdaptiveAction.cs" />
     <Compile Include="Elements\AdaptiveCard.xaml.cs">
       <DependentUpon>AdaptiveCard.xaml</DependentUpon>
     </Compile>
