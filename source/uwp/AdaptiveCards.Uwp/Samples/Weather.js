@@ -8,5 +8,5 @@ var zip = '98052';
 var forecast = JSON.parse(getBlocking('https://api.openweathermap.org/data/2.5/weather?zip=' + zip + '&units=imperial&appid=' + appId));
 
 setData({
-  forecast: forecast
+    forecast: forecast
 });

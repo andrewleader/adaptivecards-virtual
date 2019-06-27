@@ -153,7 +153,11 @@ export class SharedRenderer {
     }
 
     gotHttpResponse(url: string, response: string) {
-        this._urlCache.set(url, JSON.parse(response));
+        try {
+            this._urlCache.set(url, JSON.parse(response));
+        } catch (err) {
+            this._urlCache.set(url, response);
+        }
         this.updateData("{}");
     }
 

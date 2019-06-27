@@ -80,6 +80,11 @@ namespace AdaptiveCards.Rendering.Uwp.Elements
                     rating.Initialize(item, Renderer);
                     return rating;
 
+                case "Container":
+                    var container = new AdaptiveContainer();
+                    container.Initialize(item, Renderer);
+                    return container;
+
                 default:
                     return new AdaptiveUnknown();
             }
